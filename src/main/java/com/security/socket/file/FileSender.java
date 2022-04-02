@@ -71,7 +71,7 @@ public class FileSender extends Thread{
 
 
             int len;
-            int size = 2048;
+            int size = 4096;
 
             // 전체 암호화 진행
             byte[] wholeData = new byte[10000000];
@@ -88,19 +88,22 @@ public class FileSender extends Thread{
 //            };
 //            String test = new String(newString);
 //            System.out.println("!" + test.substring(0, wholeLen));
-            System.out.println("할로");
-            System.out.println(newString);
+//            System.out.println("할로");
+//            System.out.println(newString);
             String encrypt = AES256Util.encrypt(newString, aesKey);
             System.out.println("encrypt");
             System.out.println(encrypt);
             byte[] newData = encrypt.getBytes();
 
-            int count = wholeLen/size + 1;
-            byte[] data = new byte[size];
-            for(int i = 0;i<1;i++){
+            int count = newData.length/size + 1;
+            for(int i = 0;i<count;i++){
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                dos.write(sendData, 0, newData.length);
-                dos.write(newData, 0, newData.length);
+                if(i==0){
+                    dos.write(newData, 0, newData.length);
+                }else{
+                    dos.write(newData, 0, size);
+                }
             }
 
 //            while((len = bis.read(data)) != -1){

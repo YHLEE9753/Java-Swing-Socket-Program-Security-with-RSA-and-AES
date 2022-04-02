@@ -67,12 +67,17 @@ public class FileReceiver extends Thread {
             String decrypt = AES256Util.decrypt(newString, aesKey);
             byte[] newData = decrypt.getBytes();
 
-            int count = wholeLen/size + 1;
+            int count = newData.length/size + 1;
             byte[] data = new byte[size];
             for(int i = 0;i<count;i++){
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                bos.write(sendData, 0, size);
-                  bos.write(newData, 0, newData.length);
+//                bos.write(newData, 0, newData.length);
+                if(i==0){
+                    bos.write(newData, 0, newData.length);
+                }else{
+                    bos.write(newData, 0, size);
+                }
             }
 
 

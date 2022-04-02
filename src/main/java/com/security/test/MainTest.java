@@ -104,7 +104,7 @@ public class MainTest{
 
             // clinet 전송 테스트 파일 불러오기
             String filePath = "C:/";
-            String fileNm = "test.txt";
+            String fileNm = "test.jpg";
 
             // client 에서 server 로 파일 전송
             fileSender = new FileSender(clientService.getSk(), filePath, fileNm, aesKey);
@@ -121,7 +121,7 @@ public class MainTest{
             sock = serverService.makeSock();
 
             filePath = "C:/";
-            fileNm = "test.txt";
+            fileNm = "test.jpg";
 
             // server 에서 client 로 파일 전송
             fileSender = new FileSender(serverService.getSock(), filePath, fileNm, serverAESKey);
