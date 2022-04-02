@@ -31,4 +31,27 @@ public class AES256Util {
         byte[] decrypted = cipher.doFinal(decodedBytes);
         return new String(decrypted, "UTF-8");
     }
+
+    public static String byteEncrypt(byte[] text,String key) throws Exception {
+        String iv = key.substring(0, 16);
+        Cipher cipher = Cipher.getInstance(alg);
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+
+        byte[] encrypted = cipher.doFinal(text);
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
+
+    public static String byteDecrypt(byte[] cipherText, String key) throws Exception {
+        String iv = key.substring(0, 16);
+        Cipher cipher = Cipher.getInstance(alg);
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
+        IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
+
+        byte[] decodedBytes = cipherText;
+        byte[] decrypted = cipher.doFinal(decodedBytes);
+        return new String(decrypted, "UTF-8");
+    }
 }

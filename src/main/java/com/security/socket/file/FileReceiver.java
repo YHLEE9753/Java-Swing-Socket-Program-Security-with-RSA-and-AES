@@ -1,16 +1,22 @@
 package com.security.socket.file;
 
+import com.security.keyutil.AES256Util;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class FileReceiver extends Thread {
     Socket socket;
     DataInputStream dis = null;
     FileOutputStream fos = null;
     BufferedOutputStream bos = null;
+    private String aesKey;
 
-    public FileReceiver(Socket socket) {
+    public FileReceiver(Socket socket, String aesKey) {
         this.socket = socket;
+        this.aesKey =  aesKey;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class FileReceiver extends Thread {
     }
 
     private String fileWrite(DataInputStream dis) {
-        String result;
+        String result = null;
         String filePath = "C:/receiver";
 
         try{
@@ -50,10 +56,37 @@ public class FileReceiver extends Thread {
             // 바이트 데이터를 전송받으면서 기록
             int len;
             int size = 4096;
+
+            // 전체 암호화 진행
+            byte[] wholeData = new byte[10000000];
+            int wholeLen = dis.read(wholeData);
+            String newString = new String(wholeData);
+            newString = newString.substring(0, wholeLen);
+            System.out.println("decrypt");
+            System.out.println(newString);
+            String decrypt = AES256Util.decrypt(newString, aesKey);
+            byte[] newData = decrypt.getBytes();
+
+            int count = wholeLen/size + 1;
             byte[] data = new byte[size];
-            while((len = dis.read(data)) != -1){
-                bos.write(data ,0 ,len);
+            for(int i = 0;i<count;i++){
+//                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
+//                bos.write(sendData, 0, size);
+                  bos.write(newData, 0, newData.length);
             }
+
+
+
+//            byte[] data = new byte[size];
+//            while((len = dis.read(data)) != -1){
+//                System.out.println(data);
+//                System.out.println(data.length);
+//                String newString = new String(data);
+//                String decrypt = AES256Util.decrypt(newString, aesKey);
+//                byte[] newData = decrypt.getBytes();
+//                bos.write(newData, 0, newData.length);
+//                bos.write(data, 0, len);
+//            }
             bos.flush();
             result = "SUCCESS";
 
@@ -62,7 +95,9 @@ public class FileReceiver extends Thread {
         }catch (IOException e){
             e.printStackTrace();
             result = "ERROR";
-        }finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try{
                 bos.close();
                 fos.close();

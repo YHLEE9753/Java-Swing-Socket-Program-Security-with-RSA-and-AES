@@ -102,16 +102,16 @@ public class MainTest{
 
             // 서버는 AES 키를 통해 파일 복호화 후 확인
 
-            //전송 테스트 파일 불러오기
+            // clinet 전송 테스트 파일 불러오기
             String filePath = "C:/";
             String fileNm = "test.txt";
 
             // client 에서 server 로 파일 전송
-            fileSender = new FileSender(clientService.getSk(), filePath, fileNm);
+            fileSender = new FileSender(clientService.getSk(), filePath, fileNm, aesKey);
             fileSender.run();
 
             // server 에서 파일 읽기
-            fileReceiver = new FileReceiver(serverService.getSock());
+            fileReceiver = new FileReceiver(serverService.getSock(), serverAESKey);
             fileReceiver.run();
 
             // 포트 재연결
@@ -124,11 +124,11 @@ public class MainTest{
             fileNm = "test.txt";
 
             // server 에서 client 로 파일 전송
-            fileSender = new FileSender(serverService.getSock(), filePath, fileNm);
+            fileSender = new FileSender(serverService.getSock(), filePath, fileNm, serverAESKey);
             fileSender.run();
 
             // client 에서 파일 읽기
-            fileReceiver = new FileReceiver(clientService.getSk());
+            fileReceiver = new FileReceiver(clientService.getSk(), aesKey);
             fileReceiver.run();
 
             System.out.println("finish");
