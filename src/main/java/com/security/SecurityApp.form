@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.security.SecurityApp">
+  <grid id="27dc6" binding="jPanel" layout-manager="GridLayoutManager" row-count="19" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="722" height="523"/>
+    </constraints>
+    <properties/>
+    <border type="none" title=""/>
+    <children>
+      <component id="1ba78" class="javax.swing.JTextField" binding="obtainRelevantInformationForTextField" default-binding="true">
+        <constraints>
+          <grid row="0" column="2" row-span="4" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Obtain relevant information for user for each mode"/>
+        </properties>
+      </component>
+      <component id="8b936" class="javax.swing.JTextField" binding="communicationModeTextField" default-binding="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Communication Mode"/>
+        </properties>
+      </component>
+      <component id="b1483" class="javax.swing.JTextField" binding="showIfItIsTextField" default-binding="true">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Show if it is in connection with another program or not"/>
+        </properties>
+      </component>
+      <component id="67aee" class="javax.swing.JButton" binding="keyGenerationButton" default-binding="true">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Key generation"/>
+        </properties>
+      </component>
+      <component id="504aa" class="javax.swing.JButton" binding="sendPublicKey">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Send public key"/>
+        </properties>
+      </component>
+      <component id="89b19" class="javax.swing.JButton" binding="saveIntoAFile">
+        <constraints>
+          <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Save into a file"/>
+        </properties>
+      </component>
+      <component id="9955f" class="javax.swing.JButton" binding="loadFromAFileButton" default-binding="true">
+        <constraints>
+          <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Load from a file"/>
+        </properties>
+      </component>
+      <component id="37380" class="javax.swing.JTextField" binding="anotherUserSPublicTextField" default-binding="true">
+        <constraints>
+          <grid row="7" column="0" row-span="2" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Another user's public key information(if it is in the system or received)"/>
+        </properties>
+      </component>
+      <component id="e552d" class="javax.swing.JTextField" binding="chattingInfoTextField" default-binding="true">
+        <constraints>
+          <grid row="10" column="0" row-span="9" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="chatting info"/>
+        </properties>
+      </component>
+      <component id="8506b" class="javax.swing.JTextField" binding="fileTransferInfoTextField" default-binding="true">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="File transfer info"/>
+        </properties>
+      </component>
+      <component id="cc943" class="javax.swing.JTextField" binding="publicPrivateKeyPairTextField" default-binding="true">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Public/Private key pair information(displaying key information)"/>
+        </properties>
+      </component>
+      <component id="cdc82" class="javax.swing.JButton" binding="sendFileButton" default-binding="true">
+        <constraints>
+          <grid row="9" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Send file"/>
+        </properties>
+      </component>
+      <component id="d32dc" class="javax.swing.JTextField" binding="chatInfoTextField" default-binding="true">
+        <constraints>
+          <grid row="16" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="chat info"/>
+        </properties>
+      </component>
+      <component id="da784" class="javax.swing.JCheckBox" binding="clientCheckBox" default-binding="true">
+        <constraints>
+          <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Client"/>
+        </properties>
+      </component>
+      <component id="3184a" class="javax.swing.JCheckBox" binding="serverCheckBox" default-binding="true">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Server"/>
+        </properties>
+      </component>
+      <component id="cc42" class="javax.swing.JButton" binding="selectClientServerButton" default-binding="true">
+        <constraints>
+          <grid row="1" column="1" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="selectClient/Server"/>
+        </properties>
+      </component>
+      <component id="af3bd" class="javax.swing.JButton" binding="exchangeAESKeyUsingRSAButton" default-binding="true">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="exchange AESKey using RSA"/>
+        </properties>
+      </component>
+      <component id="6a685" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+        <constraints>
+          <grid row="10" column="3" row-span="6" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="a0540" class="javax.swing.JButton" binding="sendChatButton" default-binding="true">
+        <constraints>
+          <grid row="17" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="send chat"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="buttonGroup1">
+      <member id="da784"/>
+      <member id="3184a"/>
+    </group>
+  </buttonGroups>
+</form>

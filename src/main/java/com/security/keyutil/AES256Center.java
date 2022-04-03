@@ -8,7 +8,11 @@ import javax.crypto.spec.SecretKeySpec;
 public class AES256Center {
 
     public static String alg = "AES/CBC/PKCS5Padding";
-    private final String key = "01234567890123456789012345678901";
+    private String key = "01234567890123456789012345678901";
+
+    public AES256Center(String key) {
+        this.key = key;
+    }
 
     public String getKey() {
         return key;

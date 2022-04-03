@@ -1,12 +1,8 @@
-package com.security.socket.file;
-import com.security.keyutil.AES256Center;
+package com.security.socketService.file;
 import com.security.keyutil.AES256Util;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class FileSender extends Thread{
     private String filePath;
@@ -69,37 +65,28 @@ public class FileSender extends Thread{
             fis = new FileInputStream(file);
             bis = new BufferedInputStream(fis);
 
-
-            int len;
             int size = 4096;
 
             // 전체 암호화 진행
-            byte[] wholeData = new byte[10000000];
+            byte[] wholeData = new byte[100000000];
             int wholeLen = bis.read(wholeData);
             String newString = new String(wholeData);
             newString = newString.substring(0, wholeLen);
 
-//            int index = 0;
-//            for(int i = 0;i<wholeLen;i++){
-//                if(newString.charAt(i) == ' '){
-//                    index = i;
-//                    break;
-//                }
-//            };
-//            String test = new String(newString);
-//            System.out.println("!" + test.substring(0, wholeLen));
-//            System.out.println("할로");
-//            System.out.println(newString);
             String encrypt = AES256Util.encrypt(newString, aesKey);
             System.out.println("encrypt");
-            System.out.println(encrypt);
+//            System.out.println(encrypt);
+            System.out.println("length : "+encrypt.length());
             byte[] newData = encrypt.getBytes();
+            System.out.println("==================================");
+            System.out.println(newData.length);
 
             int count = newData.length/size + 1;
+            System.out.println(count);
             for(int i = 0;i<count;i++){
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                dos.write(sendData, 0, newData.length);
-                if(i==0){
+                if(i==count-1){
                     dos.write(newData, 0, newData.length);
                 }else{
                     dos.write(newData, 0, size);
@@ -107,12 +94,6 @@ public class FileSender extends Thread{
             }
 
 //            while((len = bis.read(data)) != -1){
-//                String newString = new String(data);
-//                String encrypt = AES256Util.encrypt(newString, aesKey);
-//                byte[] newData = encrypt.getBytes();
-//                System.out.println(newData);
-//                System.out.println(newData.length);
-//                dos.write(newData, 0, newData.length);
 //                dos.write(data, 0 ,len);
 //            }
 
