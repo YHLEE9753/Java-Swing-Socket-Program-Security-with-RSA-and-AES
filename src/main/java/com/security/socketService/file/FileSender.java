@@ -12,6 +12,7 @@ public class FileSender extends Thread{
     private FileInputStream fis;
     private BufferedInputStream bis;
     private String aesKey;
+    public String encryptedFile;
 
     public FileSender(Socket socket, String filePath, String fileNm, String aesKey){
         this.socket = socket;
@@ -74,6 +75,7 @@ public class FileSender extends Thread{
             newString = newString.substring(0, wholeLen);
 
             String encrypt = AES256Util.encrypt(newString, aesKey);
+            encryptedFile = encrypt;
             System.out.println("encrypt");
 //            System.out.println(encrypt);
             System.out.println("length : "+encrypt.length());

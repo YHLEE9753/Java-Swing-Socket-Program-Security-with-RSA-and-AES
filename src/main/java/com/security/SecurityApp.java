@@ -172,9 +172,16 @@ public class SecurityApp {
                     fileSender = new FileSender(serverService.getSock(), path1, fileNm, serverService.server.aesKey);
                     fileSender.run();
 
+
                     String path2 = filePath + "\\serversend\\FileClientReceive";
                     fileReceiver = new FileReceiver(clientService.getSk(), clientService.client.aesKey, path2);
                     fileReceiver.run();
+
+
+                    app.fileTransferInfoTextField.setText(
+                            "SendPath(server) : "+path1 + " Receive Path(client) : " + path2 + " encryptedFile : "+ fileSender.encryptedFile
+                    );
+
 
                     // 클라이언트 생성
                     // 클라이언트 접속(sock 생성)
@@ -195,6 +202,10 @@ public class SecurityApp {
                     String path4 = filePath + "\\clientsend\\FileServerReceive";
                     fileReceiver = new FileReceiver(serverService.getSock(), serverService.server.aesKey, path4);
                     fileReceiver.run();
+
+                    app.fileTransferInfoTextField.setText(
+                            "SendPath(client) : "+path3 + " Receive Path(server) : " + path4 + " encryptedFile : "+ fileSender.encryptedFile
+                    );
 
                     // 클라이언트 생성
                     // 클라이언트 접속(sock 생성)
@@ -393,6 +404,12 @@ public class SecurityApp {
 
             app.chatInfoTextField.setText("encypted message sending by client : " + clientService.client.encryptedMsg);
 
+            // Message history
+            AtomicReference<String> ttt = new AtomicReference<>("");
+            clientService.client.chatHistory.forEach((key, value) -> {
+                ttt.set(ttt + String.format("%s : %s |", key, value));
+            });
+            app.chattingInfoTextField.setText("client chat history : " + ttt.get());
         }
         // server 에 선택된 경우
         if (app.serverCheckBox.isSelected()) {
@@ -410,13 +427,13 @@ public class SecurityApp {
 
             app.chatInfoTextField.setText("encypted message sending by server : " + serverService.server.encryptedMsg);
 
+            // Message history
+            AtomicReference<String> ttt = new AtomicReference<>("");
+            serverService.server.chatHistory.forEach((key, value) -> {
+                ttt.set(ttt + String.format("%s : %s |", key, value));
+            });
+            app.chattingInfoTextField.setText("server chat history : " + ttt.get());
         }
-        // Message history
-        AtomicReference<String> ttt = new AtomicReference<>("");
-        serverService.server.chatHistory.forEach((key, value) -> {
-            ttt.set(ttt + String.format("%s : %s |", key, value));
-        });
-        app.chattingInfoTextField.setText(ttt.get());
 
 
     }
