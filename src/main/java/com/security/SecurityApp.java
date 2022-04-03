@@ -77,6 +77,81 @@ public class SecurityApp {
         sendChatButton();
 
         // send File
+        sendFileButton();
+
+        app.loadFromAFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Not used -> using send file button");
+//                File file = new File("");
+//                String filePath = String.valueOf(file.getAbsoluteFile());
+//                filePath += "\\src\\main\\java\\com\\security\\filestore";
+//                String fileNm = "testfile.txt";
+//                if (serverService.server.aesKey == null| clientService.client.aesKey == null){
+//                    JOptionPane.showMessageDialog(null, "Make AES key first");
+//                    return;
+//                }
+//                if(!serverService.server.aesKey.equals(clientService.client.aesKey)) {
+//                    JOptionPane.showMessageDialog(null, "AES key is not same");
+//                    return;
+//                }
+//                if (app.serverCheckBox.isSelected()) {
+//                    filePath += "\\serversend\\FileServerWillSend";
+//                    fileSender = new FileSender(serverService.getSock(), filePath, fileNm, serverService.server.aesKey);
+//                    fileSender.run();
+//
+//                }
+//                if (app.clientCheckBox.isSelected()) {
+//                    filePath += "\\clientsend\\FileClientWillSend";
+//                    fileSender = new FileSender(clientService.getSk(), filePath, fileNm, clientService.client.aesKey);
+//                    fileSender.run();
+//                }
+            }
+        });
+
+        // read File
+        app.saveIntoAFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Not used -> using send file button");
+//                File file = new File("");
+//                String filePath = String.valueOf(file.getAbsoluteFile());
+//                filePath += "\\src\\main\\java\\com\\security\\filestore";
+//                if (serverService.server.aesKey == null| clientService.client.aesKey == null){
+//                    JOptionPane.showMessageDialog(null, "Make AES key first");
+//                    return;
+//                }
+//                if(!serverService.server.aesKey.equals(clientService.client.aesKey)) {
+//                    JOptionPane.showMessageDialog(null, "AES key is not same");
+//                    return;
+//                }
+//                if (app.serverCheckBox.isSelected()) {
+//                    filePath += "\\clientsend\\FileServerReceive";
+//                    fileReceiver = new FileReceiver(serverService.getSock(), serverService.server.aesKey, filePath);
+//                    fileReceiver.run();
+//
+//
+//                    // 클라이언트 생성
+//                    // 클라이언트 접속(sock 생성)
+//                    try {
+//                        clientService = new ClientService();
+//                        serverService.makeSock();
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//                if (app.clientCheckBox.isSelected()) {
+//                    filePath += "\\serversend\\FileClientReceive";
+//                    fileReceiver = new FileReceiver(clientService.getSk(), clientService.client.aesKey, filePath);
+//                    fileReceiver.run();
+//                }
+            }
+        });
+
+
+    }
+
+    private static void sendFileButton() {
         app.sendFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,75 +208,6 @@ public class SecurityApp {
                 }
             }
         });
-
-        app.loadFromAFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                File file = new File("");
-                String filePath = String.valueOf(file.getAbsoluteFile());
-                filePath += "\\src\\main\\java\\com\\security\\filestore";
-                String fileNm = "testfile.txt";
-                if (serverService.server.aesKey == null| clientService.client.aesKey == null){
-                    JOptionPane.showMessageDialog(null, "Make AES key first");
-                    return;
-                }
-                if(!serverService.server.aesKey.equals(clientService.client.aesKey)) {
-                    JOptionPane.showMessageDialog(null, "AES key is not same");
-                    return;
-                }
-                if (app.serverCheckBox.isSelected()) {
-                    filePath += "\\serversend\\FileServerWillSend";
-                    fileSender = new FileSender(serverService.getSock(), filePath, fileNm, serverService.server.aesKey);
-                    fileSender.run();
-
-                }
-                if (app.clientCheckBox.isSelected()) {
-                    filePath += "\\clientsend\\FileClientWillSend";
-                    fileSender = new FileSender(clientService.getSk(), filePath, fileNm, clientService.client.aesKey);
-                    fileSender.run();
-                }
-            }
-        });
-
-        // read File
-        app.saveIntoAFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                File file = new File("");
-                String filePath = String.valueOf(file.getAbsoluteFile());
-                filePath += "\\src\\main\\java\\com\\security\\filestore";
-                if (serverService.server.aesKey == null| clientService.client.aesKey == null){
-                    JOptionPane.showMessageDialog(null, "Make AES key first");
-                    return;
-                }
-                if(!serverService.server.aesKey.equals(clientService.client.aesKey)) {
-                    JOptionPane.showMessageDialog(null, "AES key is not same");
-                    return;
-                }
-                if (app.serverCheckBox.isSelected()) {
-                    filePath += "\\clientsend\\FileServerReceive";
-                    fileReceiver = new FileReceiver(serverService.getSock(), serverService.server.aesKey, filePath);
-                    fileReceiver.run();
-
-
-                    // 클라이언트 생성
-                    // 클라이언트 접속(sock 생성)
-                    try {
-                        clientService = new ClientService();
-                        serverService.makeSock();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                if (app.clientCheckBox.isSelected()) {
-                    filePath += "\\serversend\\FileClientReceive";
-                    fileReceiver = new FileReceiver(clientService.getSk(), clientService.client.aesKey, filePath);
-                    fileReceiver.run();
-                }
-            }
-        });
-
-
     }
 
     public static void connection() throws IOException {
