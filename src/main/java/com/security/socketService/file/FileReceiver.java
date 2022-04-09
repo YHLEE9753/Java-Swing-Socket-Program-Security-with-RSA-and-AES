@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.security.PublicKey;
 
 public class FileReceiver extends Thread {
+    // set field to set connection
     Socket socket;
     DataInputStream dis = null;
     FileOutputStream fos = null;
@@ -16,10 +17,13 @@ public class FileReceiver extends Thread {
 
     PublicKey publicKey;
 
+    // information to deliever data in swing
     public static String decryptedMsg = "";
     public static String staticGetDs = "";
+    // Digital Signature is same or not
     public static boolean dsEqaul = false;
 
+    // Constructor
     public FileReceiver(Socket socket, String aesKey, String path, PublicKey publicKey) {
         this.socket = socket;
         this.aesKey = aesKey;
@@ -29,14 +33,12 @@ public class FileReceiver extends Thread {
 
     @Override
     public void run() {
-
         try {
             dis = new DataInputStream(socket.getInputStream());
             String type = dis.readUTF();
 
-            // type 값("file" 또는 "msg")을 기준으로 파일이 전송됐는지 문자열이 전송됐는지 구분
+            // get whether data is sent or not
             String result = fileWrite(dis);
-            System.out.println(result);
 
         } catch (IOException e) {
             System.out.println("run() Fail");
@@ -45,66 +47,68 @@ public class FileReceiver extends Thread {
     }
 
     private String fileWrite(DataInputStream dis) {
-        String result = "fail";
+        String result = "";
         String filePath = path;
 
         try {
             System.out.println("파일 수신 작업을 시작합니다.");
 
-            // 파일 명을 전송 받고 파일명 수정
+            // get file name
             String fileNm = dis.readUTF();
             System.out.println("파일명 " + fileNm + "을 전송받았습니다.");
 
-            // 파일을 생성하고 파일에 대한 출력 스트림 생성
+            // make File and using Stream to send
             File file = new File(filePath + "/" + fileNm);
             fos = new FileOutputStream(file);
             bos = new BufferedOutputStream(fos);
             System.out.println(fileNm + "파일을 생성");
 
+            // set size
             int size = 4096;
 
-            // 전체 암호화 진행
+            // this is whole encryption step
             byte[] wholeData = new byte[409600000];
             int wholeLen;
             String wholeString = "";
             int index = 0;
             System.out.println(wholeData);
+            // get String until stream is ended
             while ((wholeLen = dis.read(wholeData)) != -1) {
                 String newString = new String(wholeData);
                 newString = newString.substring(index, wholeLen);
                 System.out.println(newString.length());
                 wholeString = wholeString + newString;
                 if (wholeLen < 409600000) break;
-                ;
             }
-            System.out.println("!!");
-            System.out.println(index);
-            System.out.println("decrypt");
-//            System.out.println(wholeString);
-            System.out.println("length : " + wholeString.length());
+
+            // this is whole String
             decryptedMsg = wholeString;
+            // decrypt whole String
             String decrypt = AES256Util.decrypt(wholeString, aesKey);
 
-            // Digital Signature
+            // Digital Signature (using your own public key
             String ds = publicKey.toString();
+            // using String of Public Key
             int dsSize = ds.length();
             int decryptSize = decrypt.length();
 
+            // divide digital signature and original text
             String getDs = decrypt.substring(decryptSize - dsSize, decryptSize);
+            // check whether integrity is safe.
             if(getDs.equals(ds)){
                 dsEqaul = true;
                 staticGetDs = getDs;
             }
-
             decrypt = decrypt.substring(0, decryptSize - dsSize);
 
             // resume
             result = decrypt;
+            // change String to byte array
             byte[] newData = decrypt.getBytes();
 
             int count = newData.length / size + 1;
             byte[] data = new byte[size];
-            System.out.println("!!");
+            // write stream
             for (int i = 0; i < count; i++) {
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                bos.write(sendData, 0, size);
@@ -115,14 +119,8 @@ public class FileReceiver extends Thread {
                     bos.write(newData, 0, size);
                 }
             }
-//            int wholeLen = dis.read(wholeData);
-//            System.out.println("==================================");
-//            System.out.println(wholeLen);
-//            byte[] data = new byte[size];
-//            while((len = dis.read(data)) != -1){
-//                bos.write(data, 0, len);
-//            }
 
+            // using flush to finish
             bos.flush();
 
             System.out.println("파일 수신 작업 완료");
@@ -132,6 +130,7 @@ public class FileReceiver extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // do not close because socket should not be closed
 //            try{
 //                bos.close();
 //                fos.close();
@@ -140,6 +139,7 @@ public class FileReceiver extends Thread {
 //                e.printStackTrace();
 //            }
         }
+
         return result;
     }
 }

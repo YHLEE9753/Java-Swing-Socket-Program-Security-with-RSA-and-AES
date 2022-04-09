@@ -10,12 +10,15 @@ public class Client {
     public static int port = 5050;
     public static String ipAddress;
     public static boolean connection = false;
+    // client publickey and private key
     public static PublicKey myPublicKey;
     public static PrivateKey myPrivateKey;
+    // client AES key
     public static String aesKey;
+    // history about chatting include client and server
     public static Map<String, String> chatHistory = new ConcurrentHashMap<>();
+
     public static String encryptedMsg = "";
-    public static String encryptedFile = "";
 
     // this is a server key
     public static PublicKey publicKey;

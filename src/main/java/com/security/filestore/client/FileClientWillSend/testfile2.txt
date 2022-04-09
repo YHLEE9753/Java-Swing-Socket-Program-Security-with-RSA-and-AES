@@ -1,177 +1,557 @@
-javax.swing
-Class AbstractAction
-java.lang.Object
-javax.swing.AbstractAction
-All Implemented Interfaces:
-ActionListener, Serializable, Cloneable, EventListener, Action
-Direct Known Subclasses:
-BasicDesktopPaneUI.CloseAction, BasicDesktopPaneUI.MaximizeAction, BasicDesktopPaneUI.MinimizeAction, BasicDesktopPaneUI.NavigateAction, BasicDesktopPaneUI.OpenAction, BasicFileChooserUI.ApproveSelectionAction, BasicFileChooserUI.CancelSelectionAction, BasicFileChooserUI.ChangeToParentDirectoryAction, BasicFileChooserUI.GoHomeAction, BasicFileChooserUI.NewFolderAction, BasicFileChooserUI.UpdateAction, BasicInternalFrameTitlePane.CloseAction, BasicInternalFrameTitlePane.IconifyAction, BasicInternalFrameTitlePane.MaximizeAction, BasicInternalFrameTitlePane.MoveAction, BasicInternalFrameTitlePane.RestoreAction, BasicInternalFrameTitlePane.SizeAction, BasicSliderUI.ActionScroller, BasicTreeUI.TreeCancelEditingAction, BasicTreeUI.TreeHomeAction, BasicTreeUI.TreeIncrementAction, BasicTreeUI.TreePageAction, BasicTreeUI.TreeToggleAction, BasicTreeUI.TreeTraverseAction, MetalFileChooserUI.DirectoryComboBoxAction, TextAction
+What’s New In Python 3.10
+Release
+3.10.4
 
-public abstract class AbstractAction
-extends Object
-implements Action, Cloneable, Serializable
-This class provides default implementations for the JFC Action interface. Standard behaviors like the get and set methods for Action object properties (icon, text, and enabled) are defined here. The developer need only subclass this abstract class and define the actionPerformed method.
-Warning: Serialized objects of this class will not be compatible with future Swing releases. The current serialization support is appropriate for short term storage or RMI between applications running the same version of Swing. As of 1.4, support for long term storage of all JavaBeansTM has been added to the java.beans package. Please see XMLEncoder.
+Date
+April 09, 2022
 
-See Also:
-Action
-Field Summary
-Fields 
-Modifier and Type	Field and Description
-protected SwingPropertyChangeSupport	changeSupport
-If any PropertyChangeListeners have been registered, the changeSupport field describes them.
-protected boolean	enabled
-Specifies whether action is enabled; the default is true.
-Fields inherited from interface javax.swing.Action
-ACCELERATOR_KEY, ACTION_COMMAND_KEY, DEFAULT, DISPLAYED_MNEMONIC_INDEX_KEY, LARGE_ICON_KEY, LONG_DESCRIPTION, MNEMONIC_KEY, NAME, SELECTED_KEY, SHORT_DESCRIPTION, SMALL_ICON
-Constructor Summary
-Constructors 
-Constructor and Description
-AbstractAction()
-Creates an Action.
-AbstractAction(String name)
-Creates an Action with the specified name.
-AbstractAction(String name, Icon icon)
-Creates an Action with the specified name and small icon.
-Method Summary
-Methods 
-Modifier and Type	Method and Description
-void	addPropertyChangeListener(PropertyChangeListener listener)
-Adds a PropertyChangeListener to the listener list.
-protected Object	clone()
-Clones the abstract action.
-protected void	firePropertyChange(String propertyName, Object oldValue, Object newValue)
-Supports reporting bound property changes.
-Object[]	getKeys()
-Returns an array of Objects which are keys for which values have been set for this AbstractAction, or null if no keys have values set.
-PropertyChangeListener[]	getPropertyChangeListeners()
-Returns an array of all the PropertyChangeListeners added to this AbstractAction with addPropertyChangeListener().
-Object	getValue(String key)
-Gets the Object associated with the specified key.
-boolean	isEnabled()
-Returns true if the action is enabled.
-void	putValue(String key, Object newValue)
-Sets the Value associated with the specified key.
-void	removePropertyChangeListener(PropertyChangeListener listener)
-Removes a PropertyChangeListener from the listener list.
-void	setEnabled(boolean newValue)
-Sets whether the Action is enabled.
-Methods inherited from class java.lang.Object
-equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
-Methods inherited from interface java.awt.event.ActionListener
-actionPerformed
-Field Detail
-enabled
-protected boolean enabled
-Specifies whether action is enabled; the default is true.
-changeSupport
-protected SwingPropertyChangeSupport changeSupport
-If any PropertyChangeListeners have been registered, the changeSupport field describes them.
-Constructor Detail
-AbstractAction
-public AbstractAction()
-Creates an Action.
-AbstractAction
-public AbstractAction(String name)
-Creates an Action with the specified name.
-Parameters:
-name - the name (Action.NAME) for the action; a value of null is ignored
-AbstractAction
-public AbstractAction(String name,
-              Icon icon)
-Creates an Action with the specified name and small icon.
-Parameters:
-name - the name (Action.NAME) for the action; a value of null is ignored
-icon - the small icon (Action.SMALL_ICON) for the action; a value of null is ignored
-Method Detail
-getValue
-public Object getValue(String key)
-Gets the Object associated with the specified key.
-Specified by:
-getValue in interface Action
-Parameters:
-key - a string containing the specified key
-Returns:
-the binding Object stored with this key; if there are no keys, it will return null
-See Also:
-Action.getValue(java.lang.String)
-putValue
-public void putValue(String key,
-            Object newValue)
-Sets the Value associated with the specified key.
-Specified by:
-putValue in interface Action
-Parameters:
-key - the String that identifies the stored object
-newValue - the Object to store using this key
-See Also:
-Action.putValue(java.lang.String, java.lang.Object)
-isEnabled
-public boolean isEnabled()
-Returns true if the action is enabled.
-Specified by:
-isEnabled in interface Action
-Returns:
-true if the action is enabled, false otherwise
-See Also:
-Action.isEnabled()
-setEnabled
-public void setEnabled(boolean newValue)
-Sets whether the Action is enabled. The default is true.
-Specified by:
-setEnabled in interface Action
-Parameters:
-newValue - true to enable the action, false to disable it
-See Also:
-Action.setEnabled(boolean)
-getKeys
-public Object[] getKeys()
-Returns an array of Objects which are keys for which values have been set for this AbstractAction, or null if no keys have values set.
-Returns:
-an array of key objects, or null if no keys have values set
-Since:
-1.3
-firePropertyChange
-protected void firePropertyChange(String propertyName,
-                      Object oldValue,
-                      Object newValue)
-Supports reporting bound property changes. This method can be called when a bound property has changed and it will send the appropriate PropertyChangeEvent to any registered PropertyChangeListeners.
-addPropertyChangeListener
-public void addPropertyChangeListener(PropertyChangeListener listener)
-Adds a PropertyChangeListener to the listener list. The listener is registered for all properties.
-A PropertyChangeEvent will get fired in response to setting a bound property, e.g. setFont, setBackground, or setForeground. Note that if the current component is inheriting its foreground, background, or font from its container, then no event will be fired in response to a change in the inherited property.
+Editor
+Pablo Galindo Salgado
 
-Specified by:
-addPropertyChangeListener in interface Action
-Parameters:
-listener - The PropertyChangeListener to be added
-See Also:
-Action.addPropertyChangeListener(java.beans.PropertyChangeListener)
-removePropertyChangeListener
-public void removePropertyChangeListener(PropertyChangeListener listener)
-Removes a PropertyChangeListener from the listener list. This removes a PropertyChangeListener that was registered for all properties.
-Specified by:
-removePropertyChangeListener in interface Action
-Parameters:
-listener - the PropertyChangeListener to be removed
-See Also:
-Action.removePropertyChangeListener(java.beans.PropertyChangeListener)
-getPropertyChangeListeners
-public PropertyChangeListener[] getPropertyChangeListeners()
-Returns an array of all the PropertyChangeListeners added to this AbstractAction with addPropertyChangeListener().
-Returns:
-all of the PropertyChangeListeners added or an empty array if no listeners have been added
-Since:
-1.4
-clone
-protected Object clone()
-                throws CloneNotSupportedException
-Clones the abstract action. This gives the clone its own copy of the key/value list, which is not handled for you by Object.clone().
-Overrides:
-clone in class Object
-Returns:
-a clone of this instance.
-Throws:
-CloneNotSupportedException - if the object's class does not support the Cloneable interface. Subclasses that override the clone method can also throw this exception to indicate that an instance cannot be cloned.
-See Also:
-Cloneable
+This article explains the new features in Python 3.10, compared to 3.9.
+
+For full details, see the changelog.
+
+Summary – Release highlights
+New syntax features:
+
+PEP 634, Structural Pattern Matching: Specification
+
+PEP 635, Structural Pattern Matching: Motivation and Rationale
+
+PEP 636, Structural Pattern Matching: Tutorial
+
+bpo-12782, Parenthesized context managers are now officially allowed.
+
+New features in the standard library:
+
+PEP 618, Add Optional Length-Checking To zip.
+
+Interpreter improvements:
+
+PEP 626, Precise line numbers for debugging and other tools.
+
+New typing features:
+
+PEP 604, Allow writing union types as X | Y
+
+PEP 613, Explicit Type Aliases
+
+PEP 612, Parameter Specification Variables
+
+Important deprecations, removals or restrictions:
+
+PEP 644, Require OpenSSL 1.1.1 or newer
+
+PEP 632, Deprecate distutils module.
+
+PEP 623, Deprecate and prepare for the removal of the wstr member in PyUnicodeObject.
+
+PEP 624, Remove Py_UNICODE encoder APIs
+
+PEP 597, Add optional EncodingWarning
+
+New Features
+Parenthesized context managers
+Using enclosing parentheses for continuation across multiple lines in context managers is now supported. This allows formatting a long collection of context managers in multiple lines in a similar way as it was previously possible with import statements. For instance, all these examples are now valid:
+
+with (CtxManager() as example):
+    ...
+
+with (
+    CtxManager1(),
+    CtxManager2()
+):
+    ...
+
+with (CtxManager1() as example,
+      CtxManager2()):
+    ...
+
+with (CtxManager1(),
+      CtxManager2() as example):
+    ...
+
+with (
+    CtxManager1() as example1,
+    CtxManager2() as example2
+):
+    ...
+it is also possible to use a trailing comma at the end of the enclosed group:
+
+with (
+    CtxManager1() as example1,
+    CtxManager2() as example2,
+    CtxManager3() as example3,
+):
+    ...
+This new syntax uses the non LL(1) capacities of the new parser. Check PEP 617 for more details.
+
+(Contributed by Guido van Rossum, Pablo Galindo and Lysandros Nikolaou in bpo-12782 and bpo-40334.)
+
+Better error messages
+SyntaxErrors
+When parsing code that contains unclosed parentheses or brackets the interpreter now includes the location of the unclosed bracket of parentheses instead of displaying SyntaxError: unexpected EOF while parsing or pointing to some incorrect location. For instance, consider the following code (notice the unclosed ‘{‘):
+
+expected = {9: 1, 18: 2, 19: 2, 27: 3, 28: 3, 29: 3, 36: 4, 37: 4,
+            38: 4, 39: 4, 45: 5, 46: 5, 47: 5, 48: 5, 49: 5, 54: 6,
+some_other_code = foo()
+Previous versions of the interpreter reported confusing places as the location of the syntax error:
+
+File "example.py", line 3
+    some_other_code = foo()
+                    ^
+SyntaxError: invalid syntax
+but in Python 3.10 a more informative error is emitted:
+
+File "example.py", line 1
+    expected = {9: 1, 18: 2, 19: 2, 27: 3, 28: 3, 29: 3, 36: 4, 37: 4,
+               ^
+SyntaxError: '{' was never closed
+In a similar way, errors involving unclosed string literals (single and triple quoted) now point to the start of the string instead of reporting EOF/EOL.
+
+These improvements are inspired by previous work in the PyPy interpreter.
+
+(Contributed by Pablo Galindo in bpo-42864 and Batuhan Taskaya in bpo-40176.)
+
+SyntaxError exceptions raised by the interpreter will now highlight the full error range of the expression that constitutes the syntax error itself, instead of just where the problem is detected. In this way, instead of displaying (before Python 3.10):
+
+>>>
+>>> foo(x, z for z in range(10), t, w)
+  File "<stdin>", line 1
+    foo(x, z for z in range(10), t, w)
+           ^
+SyntaxError: Generator expression must be parenthesized
+now Python 3.10 will display the exception as:
+
+>>>
+>>> foo(x, z for z in range(10), t, w)
+  File "<stdin>", line 1
+    foo(x, z for z in range(10), t, w)
+           ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Generator expression must be parenthesized
+This improvement was contributed by Pablo Galindo in bpo-43914.
+
+A considerable amount of new specialized messages for SyntaxError exceptions have been incorporated. Some of the most notable ones are as follows:
+
+Missing : before blocks:
+
+>>>
+>>> if rocket.position > event_horizon
+  File "<stdin>", line 1
+    if rocket.position > event_horizon
+                                      ^
+SyntaxError: expected ':'
+(Contributed by Pablo Galindo in bpo-42997)
+
+Unparenthesised tuples in comprehensions targets:
+
+>>>
+>>> {x,y for x,y in zip('abcd', '1234')}
+  File "<stdin>", line 1
+    {x,y for x,y in zip('abcd', '1234')}
+     ^
+SyntaxError: did you forget parentheses around the comprehension target?
+(Contributed by Pablo Galindo in bpo-43017)
+
+Missing commas in collection literals and between expressions:
+
+>>>
+>>> items = {
+... x: 1,
+... y: 2
+... z: 3,
+  File "<stdin>", line 3
+    y: 2
+       ^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+(Contributed by Pablo Galindo in bpo-43822)
+
+Multiple Exception types without parentheses:
+
+>>>
+>>> try:
+...     build_dyson_sphere()
+... except NotEnoughScienceError, NotEnoughResourcesError:
+  File "<stdin>", line 3
+    except NotEnoughScienceError, NotEnoughResourcesError:
+           ^
+SyntaxError: multiple exception types must be parenthesized
+(Contributed by Pablo Galindo in bpo-43149)
+
+Missing : and values in dictionary literals:
+
+>>>
+>>> values = {
+... x: 1,
+... y: 2,
+... z:
+... }
+  File "<stdin>", line 4
+    z:
+     ^
+SyntaxError: expression expected after dictionary key and ':'
+
+>>> values = {x:1, y:2, z w:3}
+  File "<stdin>", line 1
+    values = {x:1, y:2, z w:3}
+                        ^
+SyntaxError: ':' expected after dictionary key
+(Contributed by Pablo Galindo in bpo-43823)
+
+try blocks without except or finally blocks:
+
+>>>
+>>> try:
+...     x = 2
+... something = 3
+  File "<stdin>", line 3
+    something  = 3
+    ^^^^^^^^^
+SyntaxError: expected 'except' or 'finally' block
+(Contributed by Pablo Galindo in bpo-44305)
+
+Usage of = instead of == in comparisons:
+
+>>>
+>>> if rocket.position = event_horizon:
+  File "<stdin>", line 1
+    if rocket.position = event_horizon:
+                       ^
+SyntaxError: cannot assign to attribute here. Maybe you meant '==' instead of '='?
+(Contributed by Pablo Galindo in bpo-43797)
+
+Usage of * in f-strings:
+
+>>>
+>>> f"Black holes {*all_black_holes} and revelations"
+  File "<stdin>", line 1
+    (*all_black_holes)
+     ^
+SyntaxError: f-string: cannot use starred expression here
+(Contributed by Pablo Galindo in bpo-41064)
+
+IndentationErrors
+Many IndentationError exceptions now have more context regarding what kind of block was expecting an indentation, including the location of the statement:
+
+>>>
+>>> def foo():
+...    if lel:
+...    x = 2
+  File "<stdin>", line 3
+    x = 2
+    ^
+IndentationError: expected an indented block after 'if' statement in line 2
+AttributeErrors
+When printing AttributeError, PyErr_Display() will offer suggestions of similar attribute names in the object that the exception was raised from:
+
+>>>
+>>> collections.namedtoplo
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: module 'collections' has no attribute 'namedtoplo'. Did you mean: namedtuple?
+(Contributed by Pablo Galindo in bpo-38530.)
+
+Warning Notice this won’t work if PyErr_Display() is not called to display the error which can happen if some other custom error display function is used. This is a common scenario in some REPLs like IPython.
+NameErrors
+When printing NameError raised by the interpreter, PyErr_Display() will offer suggestions of similar variable names in the function that the exception was raised from:
+
+>>>
+>>> schwarzschild_black_hole = None
+>>> schwarschild_black_hole
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'schwarschild_black_hole' is not defined. Did you mean: schwarzschild_black_hole?
+(Contributed by Pablo Galindo in bpo-38530.)
+
+Warning Notice this won’t work if PyErr_Display() is not called to display the error, which can happen if some other custom error display function is used. This is a common scenario in some REPLs like IPython.
+PEP 626: Precise line numbers for debugging and other tools
+PEP 626 brings more precise and reliable line numbers for debugging, profiling and coverage tools. Tracing events, with the correct line number, are generated for all lines of code executed and only for lines of code that are executed.
+
+The f_lineno attribute of frame objects will always contain the expected line number.
+
+The co_lnotab attribute of code objects is deprecated and will be removed in 3.12. Code that needs to convert from offset to line number should use the new co_lines() method instead.
+
+PEP 634: Structural Pattern Matching
+Structural pattern matching has been added in the form of a match statement and case statements of patterns with associated actions. Patterns consist of sequences, mappings, primitive data types as well as class instances. Pattern matching enables programs to extract information from complex data types, branch on the structure of data, and apply specific actions based on different forms of data.
+
+Syntax and operations
+The generic syntax of pattern matching is:
+
+match subject:
+    case <pattern_1>:
+        <action_1>
+    case <pattern_2>:
+        <action_2>
+    case <pattern_3>:
+        <action_3>
+    case _:
+        <action_wildcard>
+A match statement takes an expression and compares its value to successive patterns given as one or more case blocks. Specifically, pattern matching operates by:
+
+using data with type and shape (the subject)
+
+evaluating the subject in the match statement
+
+comparing the subject with each pattern in a case statement from top to bottom until a match is confirmed.
+
+executing the action associated with the pattern of the confirmed match
+
+If an exact match is not confirmed, the last case, a wildcard _, if provided, will be used as the matching case. If an exact match is not confirmed and a wildcard case does not exist, the entire match block is a no-op.
+
+Declarative approach
+Readers may be aware of pattern matching through the simple example of matching a subject (data object) to a literal (pattern) with the switch statement found in C, Java or JavaScript (and many other languages). Often the switch statement is used for comparison of an object/expression with case statements containing literals.
+
+More powerful examples of pattern matching can be found in languages such as Scala and Elixir. With structural pattern matching, the approach is “declarative” and explicitly states the conditions (the patterns) for data to match.
+
+While an “imperative” series of instructions using nested “if” statements could be used to accomplish something similar to structural pattern matching, it is less clear than the “declarative” approach. Instead the “declarative” approach states the conditions to meet for a match and is more readable through its explicit patterns. While structural pattern matching can be used in its simplest form comparing a variable to a literal in a case statement, its true value for Python lies in its handling of the subject’s type and shape.
+
+Simple pattern: match to a literal
+Let’s look at this example as pattern matching in its simplest form: a value, the subject, being matched to several literals, the patterns. In the example below, status is the subject of the match statement. The patterns are each of the case statements, where literals represent request status codes. The associated action to the case is executed after a match:
+
+def http_error(status):
+    match status:
+        case 400:
+            return "Bad request"
+        case 404:
+            return "Not found"
+        case 418:
+            return "I'm a teapot"
+        case _:
+            return "Something's wrong with the internet"
+If the above function is passed a status of 418, “I’m a teapot” is returned. If the above function is passed a status of 500, the case statement with _ will match as a wildcard, and “Something’s wrong with the internet” is returned. Note the last block: the variable name, _, acts as a wildcard and insures the subject will always match. The use of _ is optional.
+
+You can combine several literals in a single pattern using | (“or”):
+
+case 401 | 403 | 404:
+    return "Not allowed"
+Behavior without the wildcard
+If we modify the above example by removing the last case block, the example becomes:
+
+def http_error(status):
+    match status:
+        case 400:
+            return "Bad request"
+        case 404:
+            return "Not found"
+        case 418:
+            return "I'm a teapot"
+Without the use of _ in a case statement, a match may not exist. If no match exists, the behavior is a no-op. For example, if status of 500 is passed, a no-op occurs.
+
+Patterns with a literal and variable
+Patterns can look like unpacking assignments, and a pattern may be used to bind variables. In this example, a data point can be unpacked to its x-coordinate and y-coordinate:
+
+# point is an (x, y) tuple
+match point:
+    case (0, 0):
+        print("Origin")
+    case (0, y):
+        print(f"Y={y}")
+    case (x, 0):
+        print(f"X={x}")
+    case (x, y):
+        print(f"X={x}, Y={y}")
+    case _:
+        raise ValueError("Not a point")
+The first pattern has two literals, (0, 0), and may be thought of as an extension of the literal pattern shown above. The next two patterns combine a literal and a variable, and the variable binds a value from the subject (point). The fourth pattern captures two values, which makes it conceptually similar to the unpacking assignment (x, y) = point.
+
+Patterns and classes
+If you are using classes to structure your data, you can use as a pattern the class name followed by an argument list resembling a constructor. This pattern has the ability to capture class attributes into variables:
+
+class Point:
+    x: int
+    y: int
+
+def location(point):
+    match point:
+        case Point(x=0, y=0):
+            print("Origin is the point's location.")
+        case Point(x=0, y=y):
+            print(f"Y={y} and the point is on the y-axis.")
+        case Point(x=x, y=0):
+            print(f"X={x} and the point is on the x-axis.")
+        case Point():
+            print("The point is located somewhere else on the plane.")
+        case _:
+            print("Not a point")
+Patterns with positional parameters
+You can use positional parameters with some builtin classes that provide an ordering for their attributes (e.g. dataclasses). You can also define a specific position for attributes in patterns by setting the __match_args__ special attribute in your classes. If it’s set to (“x”, “y”), the following patterns are all equivalent (and all bind the y attribute to the var variable):
+
+Point(1, var)
+Point(1, y=var)
+Point(x=1, y=var)
+Point(y=var, x=1)
+Nested patterns
+Patterns can be arbitrarily nested. For example, if our data is a short list of points, it could be matched like this:
+
+match points:
+    case []:
+        print("No points in the list.")
+    case [Point(0, 0)]:
+        print("The origin is the only point in the list.")
+    case [Point(x, y)]:
+        print(f"A single point {x}, {y} is in the list.")
+    case [Point(0, y1), Point(0, y2)]:
+        print(f"Two points on the Y axis at {y1}, {y2} are in the list.")
+    case _:
+        print("Something else is found in the list.")
+Complex patterns and the wildcard
+To this point, the examples have used _ alone in the last case statement. A wildcard can be used in more complex patterns, such as ('error', code, _). For example:
+
+match test_variable:
+    case ('warning', code, 40):
+        print("A warning has been received.")
+    case ('error', code, _):
+        print(f"An error {code} occurred.")
+In the above case, test_variable will match for (‘error’, code, 100) and (‘error’, code, 800).
+
+Guard
+We can add an if clause to a pattern, known as a “guard”. If the guard is false, match goes on to try the next case block. Note that value capture happens before the guard is evaluated:
+
+match point:
+    case Point(x, y) if x == y:
+        print(f"The point is located on the diagonal Y=X at {x}.")
+    case Point(x, y):
+        print(f"Point is not on the diagonal.")
+Other Key Features
+Several other key features:
+
+Like unpacking assignments, tuple and list patterns have exactly the same meaning and actually match arbitrary sequences. Technically, the subject must be a sequence. Therefore, an important exception is that patterns don’t match iterators. Also, to prevent a common mistake, sequence patterns don’t match strings.
+
+Sequence patterns support wildcards: [x, y, *rest] and (x, y, *rest) work similar to wildcards in unpacking assignments. The name after * may also be _, so (x, y, *_) matches a sequence of at least two items without binding the remaining items.
+
+Mapping patterns: {"bandwidth": b, "latency": l} captures the "bandwidth" and "latency" values from a dict. Unlike sequence patterns, extra keys are ignored. A wildcard **rest is also supported. (But **_ would be redundant, so is not allowed.)
+
+Subpatterns may be captured using the as keyword:
+
+case (Point(x1, y1), Point(x2, y2) as p2): ...
+This binds x1, y1, x2, y2 like you would expect without the as clause, and p2 to the entire second item of the subject.
+
+Most literals are compared by equality. However, the singletons True, False and None are compared by identity.
+
+Named constants may be used in patterns. These named constants must be dotted names to prevent the constant from being interpreted as a capture variable:
+
+from enum import Enum
+class Color(Enum):
+    RED = 0
+    GREEN = 1
+    BLUE = 2
+
+match color:
+    case Color.RED:
+        print("I see red!")
+    case Color.GREEN:
+        print("Grass is green")
+    case Color.BLUE:
+        print("I'm feeling the blues :(")
+For the full specification see PEP 634. Motivation and rationale are in PEP 635, and a longer tutorial is in PEP 636.
+
+Optional EncodingWarning and encoding="locale" option
+The default encoding of TextIOWrapper and open() is platform and locale dependent. Since UTF-8 is used on most Unix platforms, omitting encoding option when opening UTF-8 files (e.g. JSON, YAML, TOML, Markdown) is a very common bug. For example:
+
+# BUG: "rb" mode or encoding="utf-8" should be used.
+with open("data.json") as f:
+    data = json.load(f)
+To find this type of bug, an optional EncodingWarning is added. It is emitted when sys.flags.warn_default_encoding is true and locale-specific default encoding is used.
+
+-X warn_default_encoding option and PYTHONWARNDEFAULTENCODING are added to enable the warning.
+
+See Text Encoding for more information.
+
+New Features Related to Type Hints
+This section covers major changes affecting PEP 484 type hints and the typing module.
+
+PEP 604: New Type Union Operator
+A new type union operator was introduced which enables the syntax X | Y. This provides a cleaner way of expressing ‘either type X or type Y’ instead of using typing.Union, especially in type hints.
+
+In previous versions of Python, to apply a type hint for functions accepting arguments of multiple types, typing.Union was used:
+
+def square(number: Union[int, float]) -> Union[int, float]:
+    return number ** 2
+Type hints can now be written in a more succinct manner:
+
+def square(number: int | float) -> int | float:
+    return number ** 2
+This new syntax is also accepted as the second argument to isinstance() and issubclass():
+
+>>>
+>>> isinstance(1, int | str)
+True
+See Union Type and PEP 604 for more details.
+
+(Contributed by Maggie Moss and Philippe Prados in bpo-41428, with additions by Yurii Karabas and Serhiy Storchaka in bpo-44490.)
+
+PEP 612: Parameter Specification Variables
+Two new options to improve the information provided to static type checkers for PEP 484‘s Callable have been added to the typing module.
+
+The first is the parameter specification variable. They are used to forward the parameter types of one callable to another callable – a pattern commonly found in higher order functions and decorators. Examples of usage can be found in typing.ParamSpec. Previously, there was no easy way to type annotate dependency of parameter types in such a precise manner.
+
+The second option is the new Concatenate operator. It’s used in conjunction with parameter specification variables to type annotate a higher order callable which adds or removes parameters of another callable. Examples of usage can be found in typing.Concatenate.
+
+See typing.Callable, typing.ParamSpec, typing.Concatenate, typing.ParamSpecArgs, typing.ParamSpecKwargs, and PEP 612 for more details.
+
+(Contributed by Ken Jin in bpo-41559, with minor enhancements by Jelle Zijlstra in bpo-43783. PEP written by Mark Mendoza.)
+
+PEP 613: TypeAlias
+PEP 484 introduced the concept of type aliases, only requiring them to be top-level unannotated assignments. This simplicity sometimes made it difficult for type checkers to distinguish between type aliases and ordinary assignments, especially when forward references or invalid types were involved. Compare:
+
+StrCache = 'Cache[str]'  # a type alias
+LOG_PREFIX = 'LOG[DEBUG]'  # a module constant
+Now the typing module has a special value TypeAlias which lets you declare type aliases more explicitly:
+
+StrCache: TypeAlias = 'Cache[str]'  # a type alias
+LOG_PREFIX = 'LOG[DEBUG]'  # a module constant
+See PEP 613 for more details.
+
+(Contributed by Mikhail Golubev in bpo-41923.)
+
+PEP 647: User-Defined Type Guards
+TypeGuard has been added to the typing module to annotate type guard functions and improve information provided to static type checkers during type narrowing. For more information, please see TypeGuard‘s documentation, and PEP 647.
+
+(Contributed by Ken Jin and Guido van Rossum in bpo-43766. PEP written by Eric Traut.)
+
+Other Language Changes
+The int type has a new method int.bit_count(), returning the number of ones in the binary expansion of a given integer, also known as the population count. (Contributed by Niklas Fiekas in bpo-29882.)
+
+The views returned by dict.keys(), dict.values() and dict.items() now all have a mapping attribute that gives a types.MappingProxyType object wrapping the original dictionary. (Contributed by Dennis Sweeney in bpo-40890.)
+
+PEP 618: The zip() function now has an optional strict flag, used to require that all the iterables have an equal length.
+
+Builtin and extension functions that take integer arguments no longer accept Decimals, Fractions and other objects that can be converted to integers only with a loss (e.g. that have the __int__() method but do not have the __index__() method). (Contributed by Serhiy Storchaka in bpo-37999.)
+
+If object.__ipow__() returns NotImplemented, the operator will correctly fall back to object.__pow__() and object.__rpow__() as expected. (Contributed by Alex Shkop in bpo-38302.)
+
+Assignment expressions can now be used unparenthesized within set literals and set comprehensions, as well as in sequence indexes (but not slices).
+
+Functions have a new __builtins__ attribute which is used to look for builtin symbols when a function is executed, instead of looking into __globals__['__builtins__']. The attribute is initialized from __globals__["__builtins__"] if it exists, else from the current builtins. (Contributed by Mark Shannon in bpo-42990.)
+
+Two new builtin functions – aiter() and anext() have been added to provide asynchronous counterparts to iter() and next(), respectively. (Contributed by Joshua Bronson, Daniel Pope, and Justin Wang in bpo-31861.)
+
+Static methods (@staticmethod) and class methods (@classmethod) now inherit the method attributes (__module__, __name__, __qualname__, __doc__, __annotations__) and have a new __wrapped__ attribute. Moreover, static methods are now callable as regular functions. (Contributed by Victor Stinner in bpo-43682.)
+
+Annotations for complex targets (everything beside simple name targets defined by PEP 526) no longer cause any runtime effects with from __future__ import annotations. (Contributed by Batuhan Taskaya in bpo-42737.)
+
+Class and module objects now lazy-create empty annotations dicts on demand. The annotations dicts are stored in the object’s __dict__ for backwards compatibility. This improves the best practices for working with __annotations__; for more information, please see Annotations Best Practices. (Contributed by Larry Hastings in bpo-43901.)
+
+Annotations consist of yield, yield from, await or named expressions are now forbidden under from __future__ import annotations due to their side effects. (Contributed by Batuhan Taskaya in bpo-42725.)
+
+Usage of unbound variables, super() and other expressions that might alter the processing of symbol table as annotations are now rendered effectless under from __future__ import annotations. (Contributed by Batuhan Taskaya in bpo-42725.)
+
+Hashes of NaN values of both float type and decimal.Decimal type now depend on object identity. Formerly, they always hashed to 0 even though NaN values are not equal to one another. This caused potentially quadratic runtime behavior due to excessive hash collisions when creating dictionaries and sets containing multiple NaNs. (Contributed by Raymond Hettinger in bpo-43475.)
+
+A SyntaxError (instead of a NameError) will be raised when deleting the __debug__ constant. (Contributed by Dong-hee Na in bpo-45000.)
+
+SyntaxError exceptions now have end_lineno and end_offset attributes. They will be None if not determined. (Contributed by Pablo Galindo in bpo-43914.)
+
+New Modules
+None yet.
+
+Improved Modules
+asyncio
+Add missing connect_accepted_socket() method. (Contributed by Alex Grönholm in bpo-41332.)
+
+argparse
+Misleading phrase “optional arguments” was replaced with “options” in argparse help. Some tests might require adaptation if they rely on exact output match. (Contributed by Raymond Hettinger in bpo-9694.)
+
+array
+The index() method of array.array now has optional start and stop parameters. (Contributed by Anders Lorentsen and Zackery Spytz in bpo-31956.)

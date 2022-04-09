@@ -11,12 +11,16 @@ public class Server {
     public int port = 5050;
     public InetAddress ipAddress;
     public boolean connection = false;
+    // Server publickey and private key
     public PublicKey publicKey;
-    public String aesKey;
     public PrivateKey privateKey;
+    // Server AES key
+    public String aesKey;
+    // history about chatting include client and server
     public Map<String, String> chatHistory = new ConcurrentHashMap<>();
-    public String encryptedMsg = "";
-    public String encryptedFile = "";
 
-    public PublicKey ClientPublicKey; // client public key
+    public String encryptedMsg = "";
+
+    // this is a client key
+    public PublicKey ClientPublicKey;
 }

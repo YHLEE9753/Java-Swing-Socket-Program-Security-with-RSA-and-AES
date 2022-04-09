@@ -19,12 +19,9 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.io.*;
 import java.security.*;
-import java.sql.Ref;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.security.socketService.client.Client.aesKey;
 
@@ -65,8 +62,10 @@ public class ClientSwing extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    // make Frame and set visible
                     ClientSwing frame = new ClientSwing();
                     frame.setVisible(true);
+
                     connection();
                     makeRSAKey();
                     saveMyRSAKeyToTxt();
@@ -75,7 +74,6 @@ public class ClientSwing extends JFrame {
                     makeAndSendAESKey();
                     GetAESKeyFromServer();
                     sendChatButtonToServer();
-//                    checkAllChating();
                     sendFile();
                     getFile();
 
@@ -89,7 +87,6 @@ public class ClientSwing extends JFrame {
                     java.util.Timer timer = new Timer("Timer");
                     long delay = 3000L;
                     long period = 1000L; // 1 second
-                    System.out.println(LocalDateTime.now() + " : Checking Refresh");
                     timer.schedule(task, delay, period);
 
                 } catch (Exception e) {
@@ -99,36 +96,43 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // get File from server
     private static void getFile() {
         GetFileBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // if client is not connected, return nothing
                 if (clientService == null) {
                     return;
                 }
+                // if AESKey is null, alarm
                 if (clientService.client.aesKey == null) {
                     JOptionPane.showMessageDialog(null, "Make AES key first");
                     return;
                 }
+                // set File directory
                 File file = new File("");
                 String rootPath = String.valueOf(file.getAbsoluteFile());
                 rootPath += "\\src\\main\\java\\com\\security\\filestore\\client\\FileClientReceive";
 
+                // using FileReceiver.java to send file
                 FileReceiver fileReceiver = new FileReceiver(clientService.getSk(), clientService.client.aesKey, rootPath, clientService.client.myPublicKey);
                 fileReceiver.run();
                 String decryptedMsg = fileReceiver.decryptedMsg;
 
 
-                if(fileReceiver.dsEqaul){
+                // if Digital Signature is same, update Swing
+                if (fileReceiver.dsEqaul) {
                     String txt = "";
-                    txt += "client receive path : " + rootPath +"\n";
+                    txt += "client receive path : " + rootPath + "\n";
                     String receive = rootPath + "\\src\\main\\java\\com\\security\\filestore\\server\\FileServerWillSend";
                     txt += "server path : " + receive + "\n\n";
                     txt += "Digital Signature is same \n";
                     txt += "Digital Signature = " + fileReceiver.staticGetDs.toString() + "\n\n";
                     txt += "CipherText of file by AES : " + decryptedMsg;
                     FileEncryptedInfo.setText(txt);
-                }else{
+                    // if not, alarm
+                } else {
                     String txt = "Digital signature is different. Integrity problem happen!!";
                     FileEncryptedInfo.setText(txt);
                 }
@@ -137,19 +141,24 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // Send file to server
     private static void sendFile() {
         SendFileBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // if client is not connected, return nothing
                 if (clientService == null) {
                     return;
                 }
+                // if AESKey is null, alarm
                 if (clientService.client.aesKey == null) {
                     JOptionPane.showMessageDialog(null, "Make AES key first");
                     return;
                 }
+                // using JFileChooser to choose file
                 JFileChooser chooser = new JFileChooser();
 
+                // set File directory
                 File file = new File("");
                 String rootPath = String.valueOf(file.getAbsoluteFile());
                 rootPath += "\\src\\main\\java\\com\\security\\filestore\\client\\FileClientWillSend";
@@ -158,20 +167,25 @@ public class ClientSwing extends JFrame {
 
                 int ret = chooser.showOpenDialog(null);
 
+                // if there is no selection in JFileChooser, alarm
                 if (ret != JFileChooser.APPROVE_OPTION) {
                     JOptionPane.showMessageDialog(null, "경로를 선택하지 않았습니다");
                     return;
                 }
+                // set receving root. root is set
                 String filePath = chooser.getSelectedFile().getPath();
                 String[] split = filePath.split("\\\\");
                 String fileNm = split[split.length - 1];
                 filePath = filePath.substring(0, filePath.length() - fileNm.length() - 1);
+
+                // using FileSender.java to send file
                 FileSender fileSender = new FileSender(clientService.getSk(), filePath, fileNm, clientService.client.aesKey, clientService.client.publicKey);
                 fileSender.run();
                 String encryptedMsg = fileSender.encryptedMsg;
 
+                // update Swing with related data
                 String txt = "";
-                txt += "client path : " + rootPath +"\n";
+                txt += "client path : " + rootPath + "\n";
                 String receive = rootPath + "\\src\\main\\java\\com\\security\\filestore\\server\\FileServerReceive";
                 txt += "server receive path : " + receive + "\n";
                 txt += "Digital Signature = " + clientService.client.publicKey.toString() + "\n\n";
@@ -181,32 +195,37 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // continuously check chatting stream
     private static void checkRefresh() {
-        System.out.println("!!");
         InputStream input_data = null;
+        // if there is no stream, nothing happen
         try {
             input_data = clientService.chattingSk.getInputStream();
         } catch (Exception e) {
             return;
         }
+
+        // if there is stream, get message
         byte[] receiveBuffer = new byte[4096];
         String data = null;
         String encryptData = "";
+        // read text msg
         try {
             int size = input_data.read(receiveBuffer);
             data = new String(receiveBuffer);
             encryptData = data;
+            // decrypt ciphertext
             data = AES256Util.decrypt(data.substring(0, size), aesKey);
         } catch (Exception e) {
             return;
         }
 
-        System.out.println("헤이1");
-        System.out.println(data);
+        // update chatting history with encrypted message and original message
         int index = clientService.client.chatHistory.size() + 1;
-        data += "\n" + "("+encryptData+")";
+        data += "\n" + "(" + encryptData + ")";
         clientService.client.chatHistory.put("server" + index, data);
 
+        // update Swing chat info
         String text = "";
         Iterator<String> keys = clientService.client.chatHistory.keySet().iterator();
         while (keys.hasNext()) {
@@ -217,43 +236,31 @@ public class ClientSwing extends JFrame {
         ChatInfo.setText("client chat history\n\n" + text);
     }
 
-//    private static void checkAllChating() {
-//        RefreshBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    clientService.CheckMsg(clientService.client.aesKey);
-//                    AtomicReference<String> ttt = new AtomicReference<>("");
-//                    clientService.client.chatHistory.forEach((key, value) -> {
-//                        ttt.set(ttt + String.format("%s : %s |", key, value));
-//                    });
-//                    ChatInfo.setText("client chat history : " + ttt.get());
-//
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
-//    }
 
+    // send chat to serveer
     private static void sendChatButtonToServer() {
         SendMsgBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // get text
                 String text = ChattextField.getText();
+                // if client is not connected, return nothing
                 if (aesKey == null) {
                     JOptionPane.showMessageDialog(null, "Make AES key first");
                     return;
                 }
+                // if AESKey is null, alarm
                 if (text.length() == 0) {
                     JOptionPane.showMessageDialog(null, "Write Something!");
                 } else {
+
                     try {
+                        // using clientService - sendChatToServer method to send chat
                         String encrypt = clientService.sendChatToServer(text, aesKey);
                         ChattextField.setText("");
                         MsgEncryptInfo.setText(encrypt);
 
+                        // update Swing with related data
                         String text2 = "";
                         Iterator<String> keys = clientService.client.chatHistory.keySet().iterator();
                         while (keys.hasNext()) {
@@ -270,12 +277,15 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // get AES key from server
     private static void GetAESKeyFromServer() {
         GETAESKeyBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    // using clientService - checkEncryptedAES method
                     clientService.checkEncryptedAES();
+                    // update Swing with related data
                     ClientAESKeyInfo.setText(aesKey);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -284,37 +294,33 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // make AES Key and send it to server
     private static void makeAndSendAESKey() {
         SendAESKeyBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // using clientService - makeAESKeyInClinet method
                 clientService.makeAESKeyInClinet();
+                // update Swing with related data
                 ClientAESKeyInfo.setText(aesKey);
                 try {
+                    // using clientService - sendAESKeyToServer method
                     clientService.sendAESKeyToServer();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchPaddingException ex) {
-                    ex.printStackTrace();
-                } catch (IllegalBlockSizeException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchAlgorithmException ex) {
-                    ex.printStackTrace();
-                } catch (BadPaddingException ex) {
-                    ex.printStackTrace();
-                } catch (InvalidKeyException ex) {
+                } catch (IOException | NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException ex) {
                     ex.printStackTrace();
                 }
             }
         });
     }
 
+    // send my public key to server
     private static void sendMyPublicKeyToServer() {
         SendPublicKeyBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String encrypted = clientService.sendPublicKeyToServer(clientService.client.myPublicKey);
+                    // using clientService - sendPublicKeyToServer method
+                    clientService.sendPublicKeyToServer(clientService.client.myPublicKey);
 
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -323,30 +329,34 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // get and save publickey from server
     private static void getAndSavePublicKeyFromServer() {
         LoadFileBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    // using clientService - getPublicKeyFromServer method
                     clientService.getPublicKeyFromServer();
+                    // update Swing with related data
                     ServerPublicKeyInfo.setText(String.valueOf(clientService.client.publicKey));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
 
+                // save public key data to client local
                 File file = new File("");
                 String rootPath = String.valueOf(file.getAbsoluteFile());
                 rootPath += "\\src\\main\\java\\com\\security\\filestore\\client\\keystorage\\ServerPublicKey.txt";
 
+                // using outputstream to save data
                 try (OutputStream output = new FileOutputStream(rootPath);
                 ) {
                     String str = String.valueOf(clientService.client.publicKey);
                     byte[] by = str.getBytes();
                     output.write(by);
+                    // alarm that data is saved
                     JOptionPane.showMessageDialog(null, rootPath + " 에 Server 의 publicKey저장되었습니다.");
 
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -356,6 +366,7 @@ public class ClientSwing extends JFrame {
     }
 
 
+    // save my RSA key (public key and private key)
     private static void saveMyRSAKeyToTxt() {
         SaveIntoFileBtn.addActionListener(new ActionListener() {
             @Override
@@ -364,19 +375,20 @@ public class ClientSwing extends JFrame {
                     return;
                 }
 
+                // save in client local
                 File file = new File("");
                 String rootPath = String.valueOf(file.getAbsoluteFile());
                 rootPath += "\\src\\main\\java\\com\\security\\filestore\\client\\keystorage\\ClientPublicKey.txt";
 
+                // using outputstream to save data
                 try (OutputStream output = new FileOutputStream(rootPath);
                 ) {
                     String str = String.valueOf(clientService.client.myPublicKey);
                     byte[] by = str.getBytes();
                     output.write(by);
+                    // alarm that data is saved
                     JOptionPane.showMessageDialog(null, rootPath + " 에 client 의 publicKey저장되었습니다.");
 
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -384,30 +396,31 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // make RSA key
     private static void makeRSAKey() {
         RSAKeyGenerationBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // if no connection, nothing happen
                 if (clientService == null) {
                     return;
                 }
 
                 KeyPair keyPair = null;
+                // get RSA key pair
                 try {
                     keyPair = RSAUtil.genRSAKeyPair();
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
 
+                // set client's field with data
                 PublicKey publicKey = keyPair.getPublic();
                 PrivateKey privateKey = keyPair.getPrivate();
                 clientService.client.myPublicKey = publicKey;
                 clientService.client.myPrivateKey = privateKey;
-                System.out.println(publicKey);
-                System.out.println(publicKey.getEncoded());
 
-
+                // update Swing with related data
                 ClientPublicKeyInfo.setText(String.valueOf(clientService.client.myPublicKey));
                 ClientPrivateKeyInfo.setText(String.valueOf(clientService.client.myPrivateKey));
 
@@ -415,17 +428,19 @@ public class ClientSwing extends JFrame {
         });
     }
 
+    // connection
     private static void connection() {
         ConnectionBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    // make new client and update Swing with related data
                     clientService = new ClientService();
                     ConnectionInfo.setText("Connection : Success");
                     IPLabel.setText("IP address : " + clientService.client.ipAddress);
                     PortLabel.setText("Socket Info : " + clientService.getSk());
                 } catch (IOException ex) {
-
+                    // this is failure case
                     ConnectionInfo.setText("Connection : Failure");
                     IPLabel.setText("IP address : ");
                     PortLabel.setText("Socket Info : ");
@@ -596,7 +611,7 @@ public class ClientSwing extends JFrame {
         FileEncryptedInfo = new JTextArea();
         FileEncryptedInfo.setBackground(Color.WHITE);
         FileEncryptedInfo.setBounds(321, 462, 306, 117);
-        FileEncryptedInfo.setFont(new Font("Serif",0 , 8));
+        FileEncryptedInfo.setFont(new Font("Serif", 0, 8));
         contentPane.add(FileEncryptedInfo);
 
         SendMsgBtn = new JButton("Send msg");

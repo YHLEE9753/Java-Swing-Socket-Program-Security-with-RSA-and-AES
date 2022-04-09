@@ -51,25 +51,12 @@ public class ServerService {
         server.ipAddress = sock.getInetAddress();
         server.connection = true;
 
-        // chat
+        // chat case
         ChattingSock = chattingSsk.accept();
+
         return sock;
     }
 
-
-    // check message from client
-     public String CheckMsg(String key) throws Exception {
-        InputStream input_data = ChattingSock.getInputStream();
-        byte[] receiveBuffer = new byte[4096];
-        int size = input_data.read(receiveBuffer);
-
-        String data = new String(receiveBuffer);
-
-        data = AES256Util.decrypt(data.substring(0,size),key);
-        int index = server.chatHistory.size()+1;
-        server.chatHistory.put("client"+index, data);
-        return data;
-    }
 
     // send chat message to client
     public String sendChatToClient(String msg, String key) throws Exception {
@@ -80,8 +67,10 @@ public class ServerService {
         // get encrypt message
         String encrypt = AES256Util.encrypt(msg,key);
         server.encryptedMsg = encrypt;
+        // send msg to client
         OutputStream output_data = ChattingSock.getOutputStream();
         output_data.write(encrypt.getBytes());
+
         return encrypt;
     }
 
@@ -96,72 +85,72 @@ public class ServerService {
             int random = (int) ((Math.random() * (max - min)) + min);
             randomKey = randomKey + String.valueOf(random);
         }
-        // get AES key
+        // get AES key from AES256 center
         AES256Center aes256Center = new AES256Center(randomKey);
         String aesKey = aes256Center.getKey();
+        // set server's AES key
         server.aesKey = aesKey;
     }
 
     // send encrypted AES Key to client
     public void sendAESKeyToClient() throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        // encrypt AES key using client's public key
         String encryptAES = RSAUtil.encryptRSA(server.aesKey, server.ClientPublicKey);
+
+        // send it to client
         OutputStream output_data = sock.getOutputStream();
         output_data.write(encryptAES.getBytes());
     }
 
 
-    // create and save PublicKey PrivateKey
-    public void makePublicKeyAndPrivateKey() throws NoSuchAlgorithmException {
-        KeyPair keyPair = RSAUtil.genRSAKeyPair();
-        PublicKey publicKey = keyPair.getPublic();
-        PrivateKey privateKey = keyPair.getPrivate();
-        server.privateKey = privateKey;
-        server.publicKey = publicKey;
-    }
     // get public key from client
     public PublicKey getPublicKeyFromClient() throws IOException {
+        // using inputstream to get key
         InputStream input_data = sock.getInputStream();
         byte[] receiveBuffer = new byte[4096];
         int size = input_data.read(receiveBuffer);
-        String data = new String(receiveBuffer);
         // get data
+        String data = new String(receiveBuffer);
         data = data.substring(0,size);
 
         PublicKey pubKey = null;
         try {
             // change it to PublicKey Type
             String publicK = data;
+            // using Base64 to change String to byte array
             byte[] publicBytes = Base64.getDecoder().decode(publicK);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            // get PublicKey type's key
             pubKey = keyFactory.generatePublic(keySpec);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        // change public key
+        // set public key
         server.ClientPublicKey = pubKey;
+
         return pubKey;
     }
 
     // send PublicKey to client
     public String sendPublicKeyToClient(PublicKey publicKey) throws IOException {
-        // send publickey to byte stream
+        // send publickey to byte array
         byte[] byte_pubkey = publicKey.getEncoded();
+        // change byte to String using Base64
         String str_key = Base64.getEncoder().encodeToString(byte_pubkey);
+        // change String to byte again
         byte[] encoded = str_key.getBytes();
+        // send data using outputstream
         OutputStream output_data = sock.getOutputStream();
         output_data.write(encoded);
+
         return str_key;
     }
 
-    // send encrypted AES key to client
-    public void sendAESKeyToClient(String aesKey) throws IOException {
-        OutputStream output_data = sock.getOutputStream();
-        output_data.write(aesKey.getBytes());
-    }
 
     // get encrypted AES
     public void checkEncryptedAES() throws Exception {
+        // using inputstream to get
         InputStream input_data = sock.getInputStream();
         byte[] receiveBuffer = new byte[4096];
         int size = input_data.read(receiveBuffer);
@@ -174,24 +163,7 @@ public class ServerService {
 
     }
 
-    // send Message to client.
-    public void sendMsgToClient(String msg, String key) throws Exception {
-        int index = server.chatHistory.size()+1;
-        server.chatHistory.put("server"+index, msg);
-        String encrypt = AES256Util.encrypt(msg,key);
-        server.encryptedMsg = encrypt;
-
-        OutputStream output_data = sock.getOutputStream();
-        output_data.write(encrypt.getBytes());
-    }
-
-
     // getter
-    public int getPort() {
-        return port;
-    }
-
-
     public Socket getSock() {
         return sock;
     }

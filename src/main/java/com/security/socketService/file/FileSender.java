@@ -1,11 +1,13 @@
 package com.security.socketService.file;
+
 import com.security.keyutil.AES256Util;
 
 import java.io.*;
 import java.net.Socket;
 import java.security.PublicKey;
 
-public class FileSender extends Thread{
+public class FileSender extends Thread {
+    // set field to set connection
     private String filePath;
     private String fileNm;
     private Socket socket;
@@ -17,7 +19,8 @@ public class FileSender extends Thread{
     public static String encryptedMsg;
     PublicKey publickey;
 
-    public FileSender(Socket socket, String filePath, String fileNm, String aesKey, PublicKey publicKey){
+    // constructor
+    public FileSender(Socket socket, String filePath, String fileNm, String aesKey, PublicKey publicKey) {
         this.socket = socket;
         this.fileNm = fileNm;
         this.filePath = filePath;
@@ -26,43 +29,33 @@ public class FileSender extends Thread{
         System.out.println("!!!?????");
         System.out.println(socket);
 
-        if(socket==null){
-            System.out.println("problem");
-        }
-        if(socket.isConnected()){
-            System.out.println(")))))))))))))))))))))))))))))))))))))))))");
-        }
-        try{
-            // 데이터 전송용 스트림 생성
-            System.out.println(1);
+        try {
+            // make stream to send data
             dos = new DataOutputStream(socket.getOutputStream());
             System.out.println(dos);
-            System.out.println(2);
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("?!@?#!@#!@?#!@?");
     }
 
 
     @Override
     public void run() {
-        try{
-            // 파일 전송을 서버에 알린다.
+        try {
+            // talk to server that i will send file
             dos.writeUTF("file");
             dos.flush();
 
-            // 전송할 파일을 읽어서 Socket Server 에 전송
+            // read file and send to Socket server
             String result = fileRead(dos);
-            // 암호화 진행
 
-            System.out.println(result);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // do not close because socket should not be closed
 //            try{
 ////                dos.close();
 ////                bis.close();
@@ -73,72 +66,61 @@ public class FileSender extends Thread{
     }
 
     private String fileRead(DataOutputStream dos) {
-        String result = "fail";
+        String result = "";
 
-        try{
+        try {
             dos.writeUTF(fileNm);
 
-            // 파일을 읽어서 서버에 전송
+            // read file and send to server
             File file = new File(filePath + "/" + fileNm);
             fis = new FileInputStream(file);
             bis = new BufferedInputStream(fis);
 
             int size = 4096;
 
-            // 전체 암호화 진행
-            // 파일 읽기
+            // read file
             byte[] wholeData = new byte[409600000];
-            while(true){
+            while (true) {
                 int wholeLen = bis.read(wholeData);
-                if(wholeLen==-1) break;
+                if (wholeLen == -1) break;
                 String newString = new String(wholeData);
                 newString = newString.substring(0, wholeLen);
 
-                // Digital Signature
+                // Check Digital Signature using other side's public key
                 String ds = publickey.toString();
                 newString += ds;
 
-
-                // 파일 암호화
+                // file encryption
                 String encrypt = AES256Util.encrypt(newString, aesKey);
                 encryptedFile = encrypt;
-
-                result = encrypt;
                 encryptedMsg = encrypt;
 
-                // 파일 암호화 길이
-                System.out.println("length : "+encrypt.length());
 
-                // 암호화 String -> byte
+                // change data String to byte
                 byte[] newData = encrypt.getBytes();
-                System.out.println("==================================");
-                System.out.println(newData.length);
 
-                int count = newData.length/size + 1;
-                System.out.println(count);
-                for(int i = 0;i<count;i++){
+                // check step
+                int count = newData.length / size + 1;
+                // write data using step
+                for (int i = 0; i < count; i++) {
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                dos.write(sendData, 0, newData.length);
-                    if(i==count-1){
+                    if (i == count - 1) {
                         dos.write(newData, 0, newData.length);
-                    }else{
+                    } else {
                         dos.write(newData, 0, size);
                     }
                 }
             }
-
-//            while((len = bis.read(data)) != -1){
-//                dos.write(data, 0 ,len);
-//            }
-
-            // 서버에 전송
+            // using flush to send
             dos.flush();
 
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // do not close because socket should not be closed
 //            try{
 //                fis.close();
 //            }catch (IOException e){
