@@ -1,4 +1,5 @@
-# Java-Swing-Socket-Program-Chat-File-with-RSA-and-AES
+# Java-Swing-Socket-Program-Security-with-RSA-and-AES
+
 
 Java Swing Socket Program - Chatting program, file sending program, exchange key program using RSA key, AES key and digital signature
 
