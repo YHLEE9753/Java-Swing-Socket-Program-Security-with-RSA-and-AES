@@ -23,4 +23,4 @@ Java Swing Socket Program - Chatting program, file sending program, exchange key
 ![image](https://user-images.githubusercontent.com/71916223/162585522-c77f244d-fa96-4db6-8bd7-b21b62ca7340.png)
 
 
-### you can see more detail in doc file
+### you can see more detail(include how run program) in doc file
