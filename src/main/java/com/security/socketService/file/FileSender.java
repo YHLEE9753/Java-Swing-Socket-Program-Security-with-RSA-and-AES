@@ -3,6 +3,7 @@ import com.security.keyutil.AES256Util;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.PublicKey;
 
 public class FileSender extends Thread{
     private String filePath;
@@ -13,19 +14,35 @@ public class FileSender extends Thread{
     private BufferedInputStream bis;
     private String aesKey;
     public String encryptedFile;
+    public static String encryptedMsg;
+    PublicKey publickey;
 
-    public FileSender(Socket socket, String filePath, String fileNm, String aesKey){
+    public FileSender(Socket socket, String filePath, String fileNm, String aesKey, PublicKey publicKey){
         this.socket = socket;
         this.fileNm = fileNm;
         this.filePath = filePath;
         this.aesKey = aesKey;
+        this.publickey = publicKey;
+        System.out.println("!!!?????");
+        System.out.println(socket);
 
+        if(socket==null){
+            System.out.println("problem");
+        }
+        if(socket.isConnected()){
+            System.out.println(")))))))))))))))))))))))))))))))))))))))))");
+        }
         try{
             // 데이터 전송용 스트림 생성
+            System.out.println(1);
             dos = new DataOutputStream(socket.getOutputStream());
+            System.out.println(dos);
+            System.out.println(2);
+
         } catch (IOException e){
             e.printStackTrace();
         }
+        System.out.println("?!@?#!@#!@?#!@?");
     }
 
 
@@ -46,17 +63,17 @@ public class FileSender extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try{
-                dos.close();
-                bis.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+//            try{
+////                dos.close();
+////                bis.close();
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
         }
     }
 
     private String fileRead(DataOutputStream dos) {
-        String result = null;
+        String result = "fail";
 
         try{
             dos.writeUTF(fileNm);
@@ -69,29 +86,44 @@ public class FileSender extends Thread{
             int size = 4096;
 
             // 전체 암호화 진행
-            byte[] wholeData = new byte[100000000];
-            int wholeLen = bis.read(wholeData);
-            String newString = new String(wholeData);
-            newString = newString.substring(0, wholeLen);
+            // 파일 읽기
+            byte[] wholeData = new byte[409600000];
+            while(true){
+                int wholeLen = bis.read(wholeData);
+                if(wholeLen==-1) break;
+                String newString = new String(wholeData);
+                newString = newString.substring(0, wholeLen);
 
-            String encrypt = AES256Util.encrypt(newString, aesKey);
-            encryptedFile = encrypt;
-            System.out.println("encrypt");
-//            System.out.println(encrypt);
-            System.out.println("length : "+encrypt.length());
-            byte[] newData = encrypt.getBytes();
-            System.out.println("==================================");
-            System.out.println(newData.length);
+                // Digital Signature
+                String ds = publickey.toString();
+                newString += ds;
 
-            int count = newData.length/size + 1;
-            System.out.println(count);
-            for(int i = 0;i<count;i++){
+
+                // 파일 암호화
+                String encrypt = AES256Util.encrypt(newString, aesKey);
+                encryptedFile = encrypt;
+
+                result = encrypt;
+                encryptedMsg = encrypt;
+
+                // 파일 암호화 길이
+                System.out.println("length : "+encrypt.length());
+
+                // 암호화 String -> byte
+                byte[] newData = encrypt.getBytes();
+                System.out.println("==================================");
+                System.out.println(newData.length);
+
+                int count = newData.length/size + 1;
+                System.out.println(count);
+                for(int i = 0;i<count;i++){
 //                byte[] sendData = Arrays.copyOfRange(newData,i*size,(i+1)*size);
 //                dos.write(sendData, 0, newData.length);
-                if(i==count-1){
-                    dos.write(newData, 0, newData.length);
-                }else{
-                    dos.write(newData, 0, size);
+                    if(i==count-1){
+                        dos.write(newData, 0, newData.length);
+                    }else{
+                        dos.write(newData, 0, size);
+                    }
                 }
             }
 
@@ -102,18 +134,16 @@ public class FileSender extends Thread{
             // 서버에 전송
             dos.flush();
 
-            result = "SUCCESS";
         }catch(IOException e){
             e.printStackTrace();
-            result = "ERROR";
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try{
-                fis.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+//            try{
+//                fis.close();
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
         }
         return result;
     }

@@ -3,7 +3,6 @@ package com.security.socketService.client;
 import com.security.keyutil.AES256Center;
 import com.security.keyutil.AES256Util;
 import com.security.keyutil.RSAUtil;
-import com.security.user.Client;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -20,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class ClientService {
+    // connection data and client data
     private Socket sk;
     private byte[] key;
     private String RSAPublicKey;
@@ -27,15 +27,48 @@ public class ClientService {
     private String aesKey;
     public Client client;
 
-    // 연길시에 소켓이 생성된다.
+    // socket for chatting
+    public Socket chattingSk;
+
+    // make socket when connection is happen
     public ClientService() throws IOException {
+        // socket
         this.sk = new Socket("127.0.0.1", 5050);
         this.client = new Client();
+        // update client data
         client.connection = true;
         client.ipAddress = "127.0.0.1";
+
+        // make chatting socket
+        this.chattingSk = new Socket("127.0.0.1", 5051);
     }
 
-    // 서버로 부터 Public Key 키 확인
+    //check message received
+    public String CheckMsg(String key) throws Exception {
+
+        InputStream input_data = chattingSk.getInputStream();
+        byte[] receiveBuffer = new byte[4096];
+        int size = input_data.read(receiveBuffer);
+
+        String data = new String(receiveBuffer);
+
+        data = AES256Util.decrypt(data.substring(0,size),key);
+        int index = client.chatHistory.size()+1;
+        client.chatHistory.put("client"+index, data);
+        return data;
+    }
+
+    // send PublicKey to server
+    public String sendPublicKeyToServer(PublicKey publicKey) throws IOException {
+        byte[] byte_pubkey = publicKey.getEncoded();
+        String str_key = Base64.getEncoder().encodeToString(byte_pubkey);
+        byte[] encoded = str_key.getBytes();
+        OutputStream output_data = sk.getOutputStream();
+        output_data.write(encoded);
+        return str_key;
+    }
+
+    // get public key from server
     public PublicKey getPublicKeyFromServer() throws IOException {
         InputStream input_data = sk.getInputStream();
         byte[] receiveBuffer = new byte[4096];
@@ -58,40 +91,45 @@ public class ClientService {
         return pubKey;
     }
 
-    // AES 키 생성
+    // make AES key
     public void makeAESKeyInClinet(){
         double min = 1;
         double max = 9;
         String randomKey = "";
+        // make random number
         for(int i = 0;i<32;i++){
             int random = (int) ((Math.random() * (max - min)) + min);
             randomKey = randomKey + String.valueOf(random);
         }
+        // make AES Key
         AES256Center aes256Center = new AES256Center(randomKey);
         String aesKey = aes256Center.getKey();
         client.aesKey = aesKey;
     }
 
-    // 암호화된 AES 키를 client 에게 전달
+    // send encrypted AES key for client
     public void sendAESKeyToServer() throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String encryptAES = RSAUtil.encryptRSA(client.aesKey, client.publicKey);
         OutputStream output_data = sk.getOutputStream();
         output_data.write(encryptAES.getBytes());
     }
 
-    // 전달받은 encrypted AES 키 확인
+    // get encrypted AES Key from server
     public String checkEncryptedAES() throws Exception {
         InputStream input_data = sk.getInputStream();
         byte[] receiveBuffer = new byte[4096];
         int size = input_data.read(receiveBuffer);
         String data = new String(receiveBuffer);
         data = data.substring(0,size);
+        // decrypt encrypted AES Key
+        String decryptRSA = RSAUtil.decryptRSA(data, client.myPrivateKey);
+        client.aesKey = decryptRSA;
         return data;
 
     }
 
 
-    // 전달받은 msg 확인
+    // check message from server
     public String checkMsg(String key) throws Exception {
         InputStream input_data = sk.getInputStream();
         byte[] receiveBuffer = new byte[4096];
@@ -104,16 +142,21 @@ public class ClientService {
 
     }
 
-    //서버와 연결을 하기위한 스트림을 생성한다.
-    public void sendMsgToServer(String msg, String key) throws Exception {
+    // send chat to server.
+    public String sendChatToServer(String msg, String key) throws Exception {
         int index = client.chatHistory.size()+1;
+        // save chat message.
         client.chatHistory.put("client"+index, msg);
         String encrypt = AES256Util.encrypt(msg,key);
+        // save encrypted message
         client.encryptedMsg = encrypt;
-        OutputStream output_data = sk.getOutputStream();
+        // send chat to server
+        OutputStream output_data = chattingSk.getOutputStream();
         output_data.write(encrypt.getBytes());
+        return encrypt;
     }
 
+    // getter method
     public Socket getSk() {
         return sk;
     }
@@ -129,5 +172,6 @@ public class ClientService {
     public PublicKey getRSAPublicKeyNotStr() {
         return RSAPublicKeyNotStr;
     }
+
 }
 

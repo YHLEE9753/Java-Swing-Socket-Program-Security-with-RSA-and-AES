@@ -1,5 +1,4 @@
-package com.security.test;
-
+package notusedtest;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -10,7 +9,7 @@ public class RSATest {
     public static void main(String[] args) throws Exception {
         // RSA 키쌍을 생성합니다.
 //        KeyPair keyPair = CipherUtil.genRSAKeyPair();
-//        PublicKey publicKey = keyPair.getPublic();
+//        notusedtest.PublicKey publicKey = keyPair.getPublic();
 //        PrivateKey privateKey = keyPair.getPrivate();
 //        String plainText = "암호화 할 문자열 입니다.";
 //
@@ -34,7 +33,7 @@ public class RSATest {
 //
 //        // 문자열로부터 PrivateKey와 PublicKey를 얻습니다.
 //        PrivateKey prKey = CipherUtil.getPrivateKeyFromBase64String(base64PrivateKey);
-//        PublicKey puKey = CipherUtil.getPublicKeyFromBase64String(base64PublicKey);
+//        notusedtest.PublicKey puKey = CipherUtil.getPublicKeyFromBase64String(base64PublicKey);
 //
 //        // 공개키로 암호화 합니다.
 //        String encrypted2 = CipherUtil.encryptRSA(plainText, puKey);

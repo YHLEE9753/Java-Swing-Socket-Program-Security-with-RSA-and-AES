@@ -7,8 +7,10 @@ import java.util.Base64;
 
 public class AES256Util {
 
+    // algorithm type
     private static String alg = "AES/CBC/PKCS5Padding";
 
+    // encrypte String plaintext using by AESkey
     public static String encrypt(String text,String key) throws Exception {
         String iv = key.substring(0, 16);
         Cipher cipher = Cipher.getInstance(alg);
@@ -20,6 +22,7 @@ public class AES256Util {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
+    // encrypte String cipherText using by AESkey
     public static String decrypt(String cipherText, String key) throws Exception {
         String iv = key.substring(0, 16);
         Cipher cipher = Cipher.getInstance(alg);
@@ -32,6 +35,7 @@ public class AES256Util {
         return new String(decrypted, "UTF-8");
     }
 
+    // not used
     public static String byteEncrypt(byte[] text,String key) throws Exception {
         String iv = key.substring(0, 16);
         Cipher cipher = Cipher.getInstance(alg);
@@ -43,6 +47,7 @@ public class AES256Util {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
+    // not used
     public static String byteDecrypt(byte[] cipherText, String key) throws Exception {
         String iv = key.substring(0, 16);
         Cipher cipher = Cipher.getInstance(alg);

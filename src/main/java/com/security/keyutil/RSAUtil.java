@@ -10,7 +10,7 @@ import java.util.Base64;
 
 public class RSAUtil {
     /**
-     * 1024비트 RSA 키쌍을 생성합니다.
+     * make 1024 bit RSA key pair
      */
     public static KeyPair genRSAKeyPair() throws NoSuchAlgorithmException {
         SecureRandom secureRandom = new SecureRandom();
@@ -22,7 +22,7 @@ public class RSAUtil {
     }
 
     /**
-     * Public Key로 RSA 암호화를 수행합니다. * @param plainText 암호화할 평문입니다. * @param publicKey 공개키 입니다. * @return
+     * encrypt plainText using public key
      */
     public static String encryptRSA(String plainText, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance("RSA");
@@ -33,7 +33,7 @@ public class RSAUtil {
     }
 
     /**
-     * Private Key로 RAS 복호화를 수행합니다. * * @param encrypted 암호화된 이진데이터를 base64 인코딩한 문자열 입니다. * @param privateKey 복호화를 위한 개인키 입니다. * @return * @throws Exception
+     * decrypte cipherText using private key
      */
     public static String decryptRSA(String encrypted, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         Cipher cipher = Cipher.getInstance("RSA");

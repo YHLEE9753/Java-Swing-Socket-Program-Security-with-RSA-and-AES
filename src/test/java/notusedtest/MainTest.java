@@ -1,4 +1,4 @@
-package com.security.test;
+package notusedtest;
 
 import com.security.keyutil.AES256Center;
 import com.security.keyutil.RSAUtil;
@@ -22,7 +22,7 @@ public class MainTest{
 //        while (true) {
 //            // 서버에서 RSA Pair, AES 키 생성
 //            KeyPair keyPair = RSAUtil.genRSAKeyPair();
-//            PublicKey publicKey = keyPair.getPublic();
+//            notusedtest.PublicKey publicKey = keyPair.getPublic();
 //            PrivateKey privateKey = keyPair.getPrivate();
 //
 //            // 클라이언트 생성
@@ -39,7 +39,7 @@ public class MainTest{
 //            // 클라이언트는 공개 키를 서버로부터 받는다
 //            System.out.println("public key : " + publicKey);
 //            serverService.sendPublicKeyToClient(publicKey);
-//            PublicKey publicKeyFromServer = clientService.getPublicKeyFromServer();
+//            notusedtest.PublicKey publicKeyFromServer = clientService.getPublicKeyFromServer();
 //            System.out.println(publicKeyFromServer);
 //
 //
@@ -83,7 +83,7 @@ public class MainTest{
 //
 //            // client 에서 server 로 데이터 전송
 //            String msg2 = "hi2";
-//            clientService.sendMsgToServer(msg2, aesKey);
+////            clientService.sendMsgToServer(msg2, aesKey);
 //
 //            // client 에서 전달받은 데이터 server 에서 확인
 ////            receiveMsg = serverService.CheckMsg(serverAESKey);
