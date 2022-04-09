@@ -19,4 +19,8 @@ Java Swing Socket Program - Chatting program, file sending program, exchange key
 6. Using AES key, they can send file
 7. When send file, attach other side's public key as digital signature and ecrypted by AES key. After other side gets it and decrypt by AES key, other side can compare attached public key and his own public key. If they are same, integrity is saved.
 
+## 4. Run program
+![image](https://user-images.githubusercontent.com/71916223/162585522-c77f244d-fa96-4db6-8bd7-b21b62ca7340.png)
+
+
 ### you can see more detail in doc file
