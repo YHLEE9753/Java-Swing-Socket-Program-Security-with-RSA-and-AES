@@ -5,7 +5,7 @@ Java Swing Socket Program - Chatting program, file sending program, exchange key
 
 ## 1.	Class Relation
 
-![image](https://user-images.githubusercontent.com/71916223/162585231-e64aab0c-6b32-4671-a85e-d72011e8e6b1.png)
+![image](https://user-images.githubusercontent.com/71916223/162702104-b713c5cd-a93a-4f64-b3de-c9ef22a0a6b4.png)
 
 ## 2. Using algorithm 
 1. RSA 1024
